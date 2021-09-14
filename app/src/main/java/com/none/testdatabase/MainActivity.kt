@@ -13,7 +13,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity()
 {
-
+    var last_saved=""
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -39,12 +39,20 @@ class MainActivity : AppCompatActivity()
             SDF.applyPattern("yyyyMMddHHmmss")
             val date= Date()
 //            刷新时间
+            last_saved=date.toString()
 
-
-            editor.putString(date.toString(),inputtext)
+            editor.putString(last_saved,inputtext)
             editor.apply()
 
 
+
+        }
+        //          读取相应存储的数据
+        binding.button2.setOnClickListener(){
+            val pref =getSharedPreferences("excuse_data",Context.MODE_PRIVATE)
+            val tempString=pref.getString("last_saved","not found")
+//            先获得实例，再访问元素，如没有就显示后面的备选项
+            Toast.makeText(this,tempString,Toast.LENGTH_SHORT).show()
         }
 
     }
