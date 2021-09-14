@@ -8,6 +8,8 @@ import com.none.testdatabase.databinding.ActivityMainBinding
 import java.io.BufferedWriter
 import java.io.IOException
 import java.io.OutputStreamWriter
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity()
 {
@@ -22,9 +24,27 @@ class MainActivity : AppCompatActivity()
         setContentView(binding.root)
 
         binding.button1.setOnClickListener(){
-            val inputtext=binding.Text1.text.toString()
+        /*使用文件进行存储
+        *             val inputtext=binding.Text1.text.toString()
             save(inputtext)
             Toast.makeText(this,inputtext+ "is saved",Toast.LENGTH_SHORT).show()
+
+        * */
+//            使用SharedPreference存储元素
+            val editor=getSharedPreferences("excuse_data",Context.MODE_PRIVATE).edit()
+//            从content中获取sharedpreference，且标记为只有该应用程序才可以对当前进行操作
+            val inputtext=binding.Text1.text.toString()
+
+            val SDF=SimpleDateFormat()//实践样例
+            SDF.applyPattern("yyyyMMddHHmmss")
+            val date= Date()
+//            刷新时间
+
+
+            editor.putString(date.toString(),inputtext)
+            editor.apply()
+
+
         }
 
     }
