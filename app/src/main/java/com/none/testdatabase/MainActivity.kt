@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity()
         val binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val dbHelper =MydatabaseHelper(this,"BookStore.db",1)
+        val dbHelper =MydatabaseHelper(this,"BookStore.db",2)
 //构造函数，指定名字，版本号设置为1
 //        第一次创建的时候会调用onCreate的方法，显示Toast，多次点击之后数据库以及创建，不会再调用该方法。
         binding.button1.setOnClickListener(){
@@ -88,16 +88,27 @@ class MydatabaseHelper(val context: Context,name:String,version:Int):
             "author text," + "price real," +
             "pages integer," + "name text)"
 //    将建表语句定义为一个字符串常量，
+//    使用双引号和加号分割字段，使用括号包括所有的字段
+    private val createCategory="create table Category("+
+        "id integer primary key autoincrement"+
+        "category_name text"+
+        "category_code integer)"
 
     override fun onCreate(p0: SQLiteDatabase)
     {
         p0.execSQL(createBook)
+        p0.execSQL(createCategory)
         Toast.makeText(context, "Created successfully", Toast.LENGTH_SHORT).show()
 //        重写建立表的onCreate方法
     }
 
-    override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int)
+    override fun onUpgrade(p0: SQLiteDatabase, p1: Int, p2: Int)
     {
-
+//  升级数据库的方法
+        p0.execSQL("drop table if exists Book")
+        p0.execSQL("drop table if exists Category")
+        onCreate(p0)
+//       使用drop语句，如果该Book或者Category表存在，则删除，
+//        随后又调用onCreate方法
     }
 }
